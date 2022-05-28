@@ -18,7 +18,7 @@ def get_data(html_data: str) -> List[str]:
             data.update({"title": element.h3.a.get('title')})
             weight_and_price = element.find_all(name='b')
             data.update({"weight": f"{weight_and_price[0].string} гр"})
-            data.update({"price": f"{weight_and_price[1].string} руб"})
+            data.update({"new_price": f"{weight_and_price[1].string} руб"})
             data.update({"img": element.img.get('src')})
             data.update({"link": element.a.get('href')})
             data.update({"phone_number": phone_number})
@@ -37,14 +37,16 @@ html_data_old = ""
 
 html_data_new = utils.get_html_page(URL, FILE_NAME)
 
-with open(FILE_NAME + ".html", "r") as file:
-    html_data_old = file.read()
+if os.path.exists(FILE_NAME + ".html"):
+    with open(FILE_NAME + ".html", "r") as file:
+        html_data_old = file.read()
 
 sushi_imperio_new_data = get_data(html_data_new)
 sushi_imperio_old_data = get_data(html_data_old)
 
 if sushi_imperio_new_data == sushi_imperio_old_data:
     print("Up to date")
+    print(sushi_imperio_new_data)
 else:
     with open(FILE_NAME + ".html", "w") as file:
         file.write(html_data_new)
