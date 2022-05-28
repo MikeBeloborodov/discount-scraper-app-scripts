@@ -44,6 +44,8 @@ def get_data(html_data: str) -> List[str]:
 
             # link
             data.update({"link": element.a.get('href')})
+            
+            # phone number
             data.update({"phone_number": phone_number})
             sushi_set_data.append(data)
         except Exception as error:
@@ -51,28 +53,32 @@ def get_data(html_data: str) -> List[str]:
 
     return sushi_set_data
 
+def main():
+    load_dotenv()
 
-load_dotenv()
+    URL = os.getenv('URL_SUSHI_BRO')
+    FILE_NAME = os.getenv('FILE_NAME_SUSHI_BRO')
+    html_data_new = ""
+    html_data_old = ""
 
-URL = os.getenv('URL_SUSHI_BRO')
-FILE_NAME = os.getenv('FILE_NAME_SUSHI_BRO')
-html_data_new = ""
-html_data_old = ""
+    html_data_new = utils.get_html_page(URL, FILE_NAME)
 
-html_data_new = utils.get_html_page(URL, FILE_NAME)
+    if os.path.exists(FILE_NAME + ".html"):
+        with open(FILE_NAME + ".html", "r") as file:
+            html_data_old = file.read()
 
-if os.path.exists(FILE_NAME + ".html"):
-    with open(FILE_NAME + ".html", "r") as file:
-        html_data_old = file.read()
+    sushi_bro_new_data = get_data(html_data_old)
+    sushi_bro_old_data = get_data(html_data_old)
 
-sushi_bro_new_data = get_data(html_data_old)
-sushi_bro_old_data = get_data(html_data_old)
+    if sushi_bro_new_data == sushi_bro_old_data:
+        print(sushi_bro_new_data)
+        print(len(sushi_bro_new_data))
+        print("Up to date")
+    else:
+        with open(FILE_NAME + ".html", "w") as file:
+            file.write(html_data_new)
+        print(sushi_bro_new_data)
+        # send data to api
 
-if sushi_bro_new_data == sushi_bro_old_data:
-    print("Up to date")
-    print(sushi_bro_new_data)
-else:
-    with open(FILE_NAME + ".html", "w") as file:
-        file.write(html_data_new)
-    print(sushi_bro_new_data)
-    # send data to api
+if __name__ == "__main__":
+    main()

@@ -15,12 +15,23 @@ def get_data(html_data: str) -> List[str]:
     for element in elements:
         data = {}
         try:
+            # title
             data.update({"title": element.h3.a.get('title')})
+            
+            # weight
             weight_and_price = element.find_all(name='b')
             data.update({"weight": f"{weight_and_price[0].string} гр"})
+            
+            # price
             data.update({"new_price": f"{weight_and_price[1].string} руб"})
+            
+            # img
             data.update({"img": element.img.get('src')})
+            
+            # link
             data.update({"link": element.a.get('href')})
+            
+            # phone number
             data.update({"phone_number": phone_number})
             sushi_set_data.append(data)
         except:
@@ -28,27 +39,33 @@ def get_data(html_data: str) -> List[str]:
     return sushi_set_data
 
 
-load_dotenv()
+def main():
+    load_dotenv()
 
-URL = os.getenv('URL_IMPERIO')
-FILE_NAME = os.getenv('FILE_NAME_IMPERIO')
-html_data_new = ""
-html_data_old = ""
+    URL = os.getenv('URL_IMPERIO')
+    FILE_NAME = os.getenv('FILE_NAME_IMPERIO')
+    html_data_new = ""
+    html_data_old = ""
 
-html_data_new = utils.get_html_page(URL, FILE_NAME)
+    html_data_new = utils.get_html_page(URL, FILE_NAME)
 
-if os.path.exists(FILE_NAME + ".html"):
-    with open(FILE_NAME + ".html", "r") as file:
-        html_data_old = file.read()
+    if os.path.exists(FILE_NAME + ".html"):
+        with open(FILE_NAME + ".html", "r") as file:
+            html_data_old = file.read()
 
-sushi_imperio_new_data = get_data(html_data_new)
-sushi_imperio_old_data = get_data(html_data_old)
+    sushi_imperio_new_data = get_data(html_data_new)
+    sushi_imperio_old_data = get_data(html_data_old)
 
-if sushi_imperio_new_data == sushi_imperio_old_data:
-    print("Up to date")
-    print(sushi_imperio_new_data)
-else:
-    with open(FILE_NAME + ".html", "w") as file:
-        file.write(html_data_new)
-    print(sushi_imperio_new_data)
-    # send data to api
+    if sushi_imperio_new_data == sushi_imperio_old_data:
+        print(sushi_imperio_new_data)
+        print(len(sushi_imperio_new_data))
+        print("Up to date")
+    else:
+        with open(FILE_NAME + ".html", "w") as file:
+            file.write(html_data_new)
+        print(sushi_imperio_new_data)
+        # send data to api
+
+
+if __name__ == "__main__":
+    main()
