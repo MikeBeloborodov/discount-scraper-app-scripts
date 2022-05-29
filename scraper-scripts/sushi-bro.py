@@ -7,6 +7,9 @@ import re
 
 
 def get_data(html_data: str) -> List[str]:
+    if not html_data:
+        return None
+        
     soup = bs(html_data, "html.parser")
     elements = soup.find_all(name='div', attrs='product-wrapper')
     phone_number = ""
@@ -67,17 +70,15 @@ def main():
         with open(FILE_NAME + ".html", "r") as file:
             html_data_old = file.read()
 
-    sushi_bro_new_data = get_data(html_data_old)
+    sushi_bro_new_data = get_data(html_data_new)
     sushi_bro_old_data = get_data(html_data_old)
 
     if sushi_bro_new_data == sushi_bro_old_data:
-        print(sushi_bro_new_data)
-        print(len(sushi_bro_new_data))
-        print("Up to date")
+        print(f"[{FILE_NAME}] is up to date\tlength - {len(sushi_bro_new_data)}")
     else:
         with open(FILE_NAME + ".html", "w") as file:
             file.write(html_data_new)
-        print(sushi_bro_new_data)
+        print(f"[!!][{FILE_NAME}] was updated\tlength - {len(sushi_bro_new_data)}")
         # send data to api
 
 if __name__ == "__main__":

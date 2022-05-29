@@ -1,0 +1,9 @@
+#!/bin/bash
+echo Start running scripts ...
+echo Entering virtualenv ...
+source ../env/bin/activate
+python3 imperio.py
+python3 sushi-bro.py
+echo Exiting virtualenv ...
+deactivate
+echo End of the script

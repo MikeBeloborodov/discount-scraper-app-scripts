@@ -6,6 +6,9 @@ from dotenv import load_dotenv
 
 
 def get_data(html_data: str) -> List[str]:
+    if not html_data:
+        return None
+        
     soup = bs(html_data, "html.parser")
     elements = soup.find_all(name='div', attrs='page-list-ext-item')
     phone_number = soup.find(id="phone").a.string
@@ -57,13 +60,11 @@ def main():
     sushi_imperio_old_data = get_data(html_data_old)
 
     if sushi_imperio_new_data == sushi_imperio_old_data:
-        print(sushi_imperio_new_data)
-        print(len(sushi_imperio_new_data))
-        print("Up to date")
+        print(f"[{FILE_NAME}] is up to date\tlength - {len(sushi_imperio_new_data)}")
     else:
         with open(FILE_NAME + ".html", "w") as file:
             file.write(html_data_new)
-        print(sushi_imperio_new_data)
+        print(f"[!!][{FILE_NAME}] was updated\tlength - {len(sushi_imperio_new_data)}")
         # send data to api
 
 
