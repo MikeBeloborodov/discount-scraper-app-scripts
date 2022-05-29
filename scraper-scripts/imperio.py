@@ -5,7 +5,7 @@ import os
 from dotenv import load_dotenv
 
 
-def get_data(html_data: str) -> List[str]:
+def get_data(html_data: str, url: str) -> List[str]:
     if not html_data:
         return None
         
@@ -36,6 +36,10 @@ def get_data(html_data: str) -> List[str]:
             
             # phone number
             data.update({"phone_number": phone_number})
+
+            # website
+            data.update({"website": url})
+
             sushi_set_data.append(data)
         except:
             pass
@@ -52,17 +56,17 @@ def main():
 
     html_data_new = utils.get_html_page(URL, FILE_NAME)
 
-    if os.path.exists(FILE_NAME + ".html"):
-        with open(FILE_NAME + ".html", "r") as file:
+    if os.path.exists("./html/" + FILE_NAME + ".html"):
+        with open("./html/" + FILE_NAME + ".html", "r") as file:
             html_data_old = file.read()
 
-    sushi_imperio_new_data = get_data(html_data_new)
-    sushi_imperio_old_data = get_data(html_data_old)
+    sushi_imperio_new_data = get_data(html_data_new, URL)
+    sushi_imperio_old_data = get_data(html_data_old, URL)
 
     if sushi_imperio_new_data == sushi_imperio_old_data:
         print(f"[{FILE_NAME}] is up to date\tlength - {len(sushi_imperio_new_data)}")
     else:
-        with open(FILE_NAME + ".html", "w") as file:
+        with open("./html/" + FILE_NAME + ".html", "w") as file:
             file.write(html_data_new)
         print(f"[!!][{FILE_NAME}] was updated\tlength - {len(sushi_imperio_new_data)}")
         # send data to api
