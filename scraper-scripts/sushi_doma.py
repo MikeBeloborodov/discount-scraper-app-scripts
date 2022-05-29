@@ -65,9 +65,11 @@ def main():
         return
 
     sushi_doma_data = get_data(html_data, URL)
-
-    print(f"[{FILE_NAME}] is always updating\tlength - {len(sushi_doma_data)}")
-    # send data to api
+    if not sushi_doma_data:
+        print(f"[!!][{FILE_NAME}] is broken")
+    else:
+        print(f"[{FILE_NAME}] is always updating\tlength - {len(sushi_doma_data)}")
+        # send data to api
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
-require('dotenv').config({path: '../../.env'});
+require('dotenv').config({path: '../.env'});
 
 (async function(){
     const browser = await puppeteer.launch({headless: true})
@@ -17,7 +17,7 @@ require('dotenv').config({path: '../../.env'});
     await autoScroll(page);
 
     page_html = await page.content(); 
-    fs.writeFile(`../html/${process.env.FILE_NAME_SUSHI_DOMA}.html`, page_html, function (err) {
+    fs.writeFile(`./html/${process.env.FILE_NAME_SUSHI_DOMA}.html`, page_html, function (err) {
         if (err) return console.log(err);
       })
 
