@@ -47,30 +47,32 @@ def get_data(html_data: str, url: str) -> List[str]:
 
 
 def main():
-    load_dotenv()
+    try:
+        load_dotenv()
 
-    URL = os.getenv('URL_IMPERIO')
-    FILE_NAME = os.getenv('FILE_NAME_IMPERIO')
-    html_data_new = ""
-    html_data_old = ""
+        URL = os.getenv('URL_IMPERIO')
+        FILE_NAME = os.getenv('FILE_NAME_IMPERIO')
+        html_data_new = ""
+        html_data_old = ""
 
-    html_data_new = utils.get_html_page(URL, FILE_NAME)
+        html_data_new = utils.get_html_page(URL)
 
-    if os.path.exists("./html/" + FILE_NAME + ".html"):
-        with open("./html/" + FILE_NAME + ".html", "r") as file:
-            html_data_old = file.read()
+        if os.path.exists("./html/" + FILE_NAME + ".html"):
+            with open("./html/" + FILE_NAME + ".html", "r") as file:
+                html_data_old = file.read()
 
-    sushi_imperio_new_data = get_data(html_data_new, URL)
-    sushi_imperio_old_data = get_data(html_data_old, URL)
+        sushi_imperio_new_data = get_data(html_data_new, URL)
+        sushi_imperio_old_data = get_data(html_data_old, URL)
 
-    if sushi_imperio_new_data == sushi_imperio_old_data:
-        print(f"[{FILE_NAME}] is up to date\tlength - {len(sushi_imperio_new_data)}")
-    else:
-        with open("./html/" + FILE_NAME + ".html", "w") as file:
-            file.write(html_data_new)
-        print(f"[!!][{FILE_NAME}] was updated\tlength - {len(sushi_imperio_new_data)}")
-        # send data to api
-
+        if sushi_imperio_new_data == sushi_imperio_old_data:
+            print(f"[{FILE_NAME}] is up to date\tlength - {len(sushi_imperio_new_data)}")
+        else:
+            with open("./html/" + FILE_NAME + ".html", "w") as file:
+                file.write(str(html_data_new))
+            print(f"[!!][{FILE_NAME}] was updated\tlength - {len(sushi_imperio_new_data)}")
+            # send data to api
+    except Exception as error:
+        print(f"[!!!] An error occured: {error}")
 
 if __name__ == "__main__":
     main()

@@ -51,26 +51,28 @@ def get_data(html_data: str, url: str) -> List[str]:
 
 
 def main():
-    load_dotenv()
+    try:
+        load_dotenv()
 
-    FILE_NAME = os.getenv('FILE_NAME_SUSHI_DOMA')
-    URL = os.getenv('URL_SUSHI_DOMA')
-    html_data = ""
+        FILE_NAME = os.getenv('FILE_NAME_SUSHI_DOMA')
+        URL = os.getenv('URL_SUSHI_DOMA')
+        html_data = ""
 
-    if os.path.exists("./html/" + FILE_NAME + ".html"):
-        with open("./html/" + FILE_NAME + ".html", "r") as file:
-            html_data = file.read()
-    else:
-        print(f"[!!][{FILE_NAME}] html file does not exist.")
-        return
+        if os.path.exists("./html/" + FILE_NAME + ".html"):
+            with open("./html/" + FILE_NAME + ".html", "r") as file:
+                html_data = file.read()
+        else:
+            print(f"[!!][{FILE_NAME}] html file does not exist.")
+            return
 
-    sushi_doma_data = get_data(html_data, URL)
-    if not sushi_doma_data:
-        print(f"[!!][{FILE_NAME}] is broken")
-    else:
-        print(f"[{FILE_NAME}] is always updating\tlength - {len(sushi_doma_data)}")
-        # send data to api
-
+        sushi_doma_data = get_data(html_data, URL)
+        if not sushi_doma_data:
+            print(f"[!!][{FILE_NAME}] is broken")
+        else:
+            print(f"[{FILE_NAME}] is always updating\tlength - {len(sushi_doma_data)}")
+            # send data to api
+    except Exception as error:
+        print(f"[!!!] An error occured: {error}")
 
 if __name__ == "__main__":
     main()
