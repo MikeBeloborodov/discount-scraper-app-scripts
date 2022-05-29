@@ -7,6 +7,7 @@ source ../env/bin/activate
 python3 imperio.py
 python3 sushi-bro.py
 python3 sushi_doma.py
+python3 hochu_sushi.py
 echo Exiting virtualenv ...
 deactivate
 echo End of the script
