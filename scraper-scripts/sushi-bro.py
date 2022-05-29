@@ -17,7 +17,7 @@ def get_data(html_data: str, url: str) -> List[str]:
                                 attrs='inline-list inline-list-with-border main-nav-style')
                                 .find_all(name='a')):
         try:
-            phone_number = element.get("href")[3:]
+            phone_number = element.get("href")[4:]
         except:
             pass
 

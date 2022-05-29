@@ -43,7 +43,7 @@ def get_data(html_data: str, url: str) -> List[str]:
             data.update({"link": url})
             
             # phone number
-            data.update({"phone_number": phone_number[3:]})
+            data.update({"phone_number": phone_number[4:]})
             
             # website
             data.update({"website": url})
