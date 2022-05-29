@@ -47,6 +47,9 @@ def get_data(html_data: str, url: str) -> List[str]:
             
             # website
             data.update({"website": url})
+
+            # cathegory
+            data.update({"cathegory": "sushi"})
             
             sushi_set_data.append(data)
         except Exception as error:
@@ -60,25 +63,16 @@ def main():
 
         URL = os.getenv('URL_HOCHU_SUSHI')
         FILE_NAME = os.getenv('FILE_NAME_HOCHU_SUSHI')
-        html_data_new = ""
-        html_data_old = ""
 
-        html_data_new = utils.get_html_page(URL)
+        html_data = utils.get_html_page(URL)
+        hochu_sushi_data = get_data(html_data, URL)
 
-        if os.path.exists("./html/" + FILE_NAME + ".html"):
-            with open("./html/" + FILE_NAME + ".html", "r") as file:
-                html_data_old = file.read()
-
-        hochu_sushi_new_data = get_data(html_data_new, URL)
-        hochu_sushi_old_data = get_data(html_data_old, URL)
-
-        if hochu_sushi_new_data == hochu_sushi_old_data:
-            print(f"[{FILE_NAME}] is up to date\tlength - {len(hochu_sushi_new_data)}")
-        else:
-            with open("./html/" + FILE_NAME + ".html", "w") as file:
-                file.write(str(html_data_new))
-            print(f"[!!][{FILE_NAME}] was updated\tlength - {len(hochu_sushi_new_data)}")
-            # send data to api
+        with open("./html/" + FILE_NAME + ".html", "w") as file:
+            file.write(str(html_data))
+        print(f"[!!][{FILE_NAME}] was updated\tlength - {len(hochu_sushi_data)}")
+        utils.save_json(hochu_sushi_data, FILE_NAME)
+        print(f"[{FILE_NAME}] json file created")
+        
     except Exception as error:
         print(f"[!!!] An error occured: {error}")
 

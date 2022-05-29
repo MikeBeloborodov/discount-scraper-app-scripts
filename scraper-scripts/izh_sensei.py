@@ -55,6 +55,9 @@ def get_data(html_data: str, url: str) -> List[str]:
             # website
             data.update({"website": os.getenv('URL_IZH_SENSEI_CLEAN')})
 
+            # cathegory
+            data.update({"cathegory": "sushi"})
+
             sushi_set_data.append(data)
 
         except Exception as error:
@@ -68,17 +71,17 @@ def main():
 
         URL = os.getenv('URL_IZH_SENSEI')
         FILE_NAME = os.getenv('FILE_NAME_IZH_SENSEI')
-        html_data_new = ""
 
-        html_data_new = utils.get_html_page(URL)
-        izh_sensei_new_data = get_data(html_data_new, URL)
-        if not izh_sensei_new_data:
-            print(f"[!!][{FILE_NAME}] error, empty")
-        else:
-            with open("./html/" + FILE_NAME + ".html", "w") as file:
-                file.write(str(html_data_new))
-            print(f"[!!][{FILE_NAME}] was updated\tlength - {len(izh_sensei_new_data)}")
-            # send data to api
+        html_data = utils.get_html_page(URL)
+        izh_sensei_data = get_data(html_data, URL)
+
+        with open("./html/" + FILE_NAME + ".html", "w") as file:
+            file.write(str(html_data))
+
+        print(f"[!!][{FILE_NAME}] was updated\tlength - {len(izh_sensei_data)}")
+        utils.save_json(izh_sensei_data, FILE_NAME)
+        print(f"[{FILE_NAME}] json file created")
+        
     except Exception as error:
         print(f"[!!!] An error occured: {error}")
 

@@ -3,6 +3,7 @@ from typing import List
 import os
 from dotenv import load_dotenv
 import re
+import utils
 
 
 def get_data(html_data: str, url: str) -> List[str]:
@@ -44,6 +45,9 @@ def get_data(html_data: str, url: str) -> List[str]:
             # website
             data.update({'website': url})
 
+            # cathegory
+            data.update({"cathegory": "sushi"})
+
             sushi_set_data.append(data)
         except:
             pass
@@ -69,8 +73,10 @@ def main():
         if not sushi_doma_data:
             print(f"[!!][{FILE_NAME}] is broken")
         else:
-            print(f"[{FILE_NAME}] is always updating\tlength - {len(sushi_doma_data)}")
-            # send data to api
+            print(f"[{FILE_NAME}] was updated\tlength - {len(sushi_doma_data)}")
+            utils.save_json(sushi_doma_data, FILE_NAME)
+            print(f"[{FILE_NAME}] json file created")
+            
     except Exception as error:
         print(f"[!!!] An error occured: {error}")
 
