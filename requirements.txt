@@ -1,0 +1,9 @@
+beautifulsoup4==4.11.1
+certifi==2022.5.18.1
+charset-normalizer==2.0.12
+-e git+ssh://git@github.com/MikeBeloborodov/discount-scraper-app-scripts.git@549e01b169622085c0f33bacc132bdb258260cd8#egg=discount_scraper_app_scripts
+idna==3.3
+python-dotenv==0.20.0
+requests==2.27.1
+soupsieve==2.3.2.post1
+urllib3==1.26.9

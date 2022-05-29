@@ -4,3 +4,4 @@ discount_scraper_app_scripts.egg-info/
 *.html
 .env
 __pycache__
+node_modules
