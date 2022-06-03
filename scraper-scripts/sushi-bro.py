@@ -37,10 +37,10 @@ def get_data(html_data: str, url: str) -> List[str]:
             # prices
             prices = element.find_all(name='span', attrs='woocommerce-Price-amount amount')
             if len(prices) == 2:
-                data.update({"old_price": f"{str(prices[0].text)[:-5]} руб"})
-                data.update({"new_price": f"{str(prices[1].text)[:-5]} руб"})
+                data.update({"old_price": f"{str(prices[0].text)[:-5]}".replace(' ', '')})
+                data.update({"new_price": f"{str(prices[1].text)[:-5]}".replace(' ', '')})
             else:
-                data.update({"new_price": f"{str(prices[0].text)[:-5]} руб"})
+                data.update({"new_price": f"{str(prices[0].text)[:-5]}".replace(' ', '')})
             
             # img
             data.update({"img": element.img.get('src')})

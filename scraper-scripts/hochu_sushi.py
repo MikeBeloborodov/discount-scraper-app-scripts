@@ -30,10 +30,10 @@ def get_data(html_data: str, url: str) -> List[str]:
             prices_raw = element.find('div', attrs="price").text
             prices_clean = re.findall('[0-9\s]*\s?р', str(prices_raw))
             if len(prices_clean) == 2:
-                data.update({"old_price": f"{str(prices_clean[0][:-2])} руб"})
-                data.update({"new_price": f"{str(prices_clean[1][:-2])} руб"})
+                data.update({"old_price": f"{str(prices_clean[0][:-2])}".replace(' ', '')})
+                data.update({"new_price": f"{str(prices_clean[1][:-2])}".replace(' ', '')})
             else:
-                data.update({"new_price": f"{str(prices_clean[0][:-2])} руб"})
+                data.update({"new_price": f"{str(prices_clean[0][:-2])}".replace(' ', '')})
 
             
             # img

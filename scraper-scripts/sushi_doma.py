@@ -26,10 +26,10 @@ def get_data(html_data: str, url: str) -> List[str]:
             # price
             prices = element.find_all(name='span', attrs="price-value")
             if len(prices) == 2:
-                data.update({"old_price": f"{prices[1].text[:-2]} руб"})
-                data.update({"new_price": f"{prices[0].text[:-2]} руб"})
+                data.update({"old_price": f"{prices[1].text[:-2]}".replace(' ', '')})
+                data.update({"new_price": f"{prices[0].text[:-2]}".replace(' ', '')})
             else:
-                data.update({"new_price": f"{prices[0].text[:-2]} руб"})
+                data.update({"new_price": f"{prices[0].text[:-2]}".replace(' ', '')})
             
             # img
             img_raw = element.find(name='div', attrs='v-lazy-img cursor-pointer lazy-load flex').get('style')

@@ -38,10 +38,10 @@ def get_data(html_data: str, url: str) -> List[str]:
             prices_raw = element.find(name='div', attrs='catalog__by-group').text.strip().replace(" ", "")
             prices_clean = re.findall('[0-9]+', prices_raw)
             if len(prices_clean) == 2:
-                data.update({"old_price": f"{str(prices_clean[0])} руб"})
-                data.update({"new_price": f"{str(prices_clean[1])} руб"})
+                data.update({"old_price": f"{str(prices_clean[0])}".replace(' ', '')})
+                data.update({"new_price": f"{str(prices_clean[1])}".replace(' ', '')})
             else:
-                data.update({"new_price": f"{str(prices_clean[0])} руб"})
+                data.update({"new_price": f"{str(prices_clean[0])}".replace(' ', '')})
             
             # img
             data.update({"img": os.getenv('URL_IZH_SENSEI_CLEAN') + element.img.get('src')[2:]})

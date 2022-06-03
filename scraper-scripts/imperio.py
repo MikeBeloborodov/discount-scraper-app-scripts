@@ -26,7 +26,7 @@ def get_data(html_data: str, url: str) -> List[str]:
             data.update({"weight": f"{weight_and_price[0].string} гр"})
             
             # price
-            data.update({"new_price": f"{weight_and_price[1].string} руб"})
+            data.update({"new_price": f"{weight_and_price[1].string}".replace(' ', '')})
             
             # img
             data.update({"img": element.img.get('src')})
