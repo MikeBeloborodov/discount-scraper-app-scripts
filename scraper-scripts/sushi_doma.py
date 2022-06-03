@@ -42,8 +42,11 @@ def get_data(html_data: str, url: str) -> List[str]:
             # phone number
             data.update({"phone_number": phone_number})
 
-            # website
-            data.update({'website': url})
+            # website link
+            data.update({'website_link': url})
+
+            # website title
+            data.update({"website_title": "Суши дома"})
 
             # cathegory
             data.update({"cathegory": "sushi"})

@@ -52,8 +52,11 @@ def get_data(html_data: str, url: str) -> List[str]:
             # phone number
             data.update({"phone_number": phone_number[4:]})
             
-            # website
-            data.update({"website": os.getenv('URL_IZH_SENSEI_CLEAN')})
+            # website link
+            data.update({"website_link": os.getenv('URL_IZH_SENSEI_CLEAN')})
+
+            # website title
+            data.update({"website_title" : "Izh sensei"})
 
             # cathegory
             data.update({"cathegory": "sushi"})
