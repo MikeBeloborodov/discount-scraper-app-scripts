@@ -15,7 +15,8 @@ def upload_data(url: str, email: str, password: str, all_data):
         res = requests.post(f"{url}/promo", json=data, headers={"Authorization": f"Bearer {acess_token}"})
         if not res.status_code == 201:
             errors += 1
-            print(f"[!!] ERROR WITH FILE {data['website']}")
+            print(f"[!!] ERROR WITH FILE {data['website_title']}")
+            print(res.json())
     
     print(f"[!] DATA FINISHED UPLOADING, ERRORS - {errors}, FILES SENT - {len(all_data)}")
 
