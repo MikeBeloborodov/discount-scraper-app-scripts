@@ -46,7 +46,7 @@ def upload_new_websites(url: str, email: str, password: str, all_data):
             errors += 1
             print(f"[!!] ERROR WITH FILE {data['website']}")
     
-    print(f"[!] DATA FINISHED UPLOADING, ERRORS - {errors}, FILES SENT - {len(all_data)}")
+    print(f"[!] WEBSITES FINISHED UPLOADING, ERRORS - {errors}, WEBSITES SENT - {len(all_data)}")
 
 
 
@@ -83,8 +83,6 @@ def main():
                 raw = json_file.read()
                 clean = json.loads(raw)
                 all_jsons.extend(clean)
-        with open("./json/all.txt", "w") as file:
-            file.write(json.dumps(all_jsons))
 
         for file in file_names:
             with open(f"./json/{file}", "r") as json_file:
@@ -96,7 +94,6 @@ def main():
                 cathegory = clean[0]['cathegory']
                 all_websites.append({"title": title, "link": link, "phone_number": phone_number, "cathegory": cathegory})
 
-                
         delete_old_tables(URL, EMAIL, PASSWORD)
         upload_data(URL, EMAIL, PASSWORD, all_jsons)
         delete_old_websites(URL, EMAIL, PASSWORD)

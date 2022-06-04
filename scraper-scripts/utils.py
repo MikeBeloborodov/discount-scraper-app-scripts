@@ -1,11 +1,12 @@
 import requests
-from fake_useragent import UserAgent
 import json
 from typing import List
+from user_agent2 import generate_user_agent
+
 
 def get_html_page(url: str) -> str:
-    ua = UserAgent()
-    headers = {'User-Agent': ua.chrome}    
+    ua = generate_user_agent(navigator="chrome")
+    headers = {'User-Agent': ua}    
     res  = requests.get(url, headers=headers)
 
     return res.content
