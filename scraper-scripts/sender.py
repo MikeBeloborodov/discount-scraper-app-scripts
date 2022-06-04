@@ -93,7 +93,8 @@ def main():
                 title = clean[0]['website_title']
                 link = clean[0]['website_link']
                 phone_number = clean[0]['phone_number']
-                all_websites.append({"title": title, "link": link, "phone_number": phone_number})
+                cathegory = clean[0]['cathegory']
+                all_websites.append({"title": title, "link": link, "phone_number": phone_number, "cathegory": cathegory})
 
                 
         delete_old_tables(URL, EMAIL, PASSWORD)
