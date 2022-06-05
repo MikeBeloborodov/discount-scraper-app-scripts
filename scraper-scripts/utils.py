@@ -1,7 +1,7 @@
 import requests
-import json
 from typing import List
 from user_agent2 import generate_user_agent
+import json
 
 
 def get_html_page(url: str) -> str:
@@ -10,6 +10,15 @@ def get_html_page(url: str) -> str:
     res  = requests.get(url, headers=headers)
 
     return res.content
+
+
+def get_json_data(url: str) -> str:
+    ua = generate_user_agent(navigator="chrome")
+    headers = {'User-Agent': ua}    
+    res  = requests.get(url, headers=headers)
+
+
+    return res.json()
 
 
 def save_json(data: List[dict], file_name: str) -> None:
