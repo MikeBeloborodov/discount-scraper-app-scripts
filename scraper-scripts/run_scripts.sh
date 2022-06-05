@@ -19,6 +19,7 @@ python3 dakicho.py
 python3 ronny_burgers.py
 python3 tri_bogatirya.py
 python3 kinza.py
+python3 perepechka.py
 python3 sender.py
 echo Exiting virtualenv ...
 deactivate
