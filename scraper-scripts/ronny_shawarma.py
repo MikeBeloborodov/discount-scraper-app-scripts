@@ -11,11 +11,11 @@ def get_data(html_data: str, url: str) -> List[str]:
         return None
         
     soup = bs(html_data, "html.parser")
-    burger_box = soup.find(name='div', attrs='mobile-catalog')
-    elements = burger_box.find_all(name='div', attrs='meal-item-mobile')
+    shawarma_box = soup.find(name='div', attrs='mobile-catalog')
+    elements = shawarma_box.find_all(name='div', attrs='meal-item-mobile')
     phone_number = soup.find(name='p', attrs='delivery-phone').text.strip()
 
-    burger_data = []
+    shawarma_data = []
     for element in elements:
         data = {}
         try:
@@ -46,35 +46,35 @@ def get_data(html_data: str, url: str) -> List[str]:
             # weight
             weight = element.find(name='div', attrs='meal-content-weight').text.strip()
             data.update({"weight": weight})
-            
+
             # ingredients
             ingredients = element.find(name='div', attrs='meal-content-text').text.strip().replace('\xa0', ' ')
             data.update({"ingredients": ingredients})
 
             # cathegory
-            data.update({"cathegory": "burger"})
+            data.update({"cathegory": "shawarma"})
             
-            burger_data.append(data)
+            shawarma_data.append(data)
 
         except Exception as error:
             print(error)
 
-    return burger_data[:13]
+    return shawarma_data[15:17]
 
 def main():
     try:
         load_dotenv()
 
         URL = os.getenv('URL_RONNY_BURGERS')
-        FILE_NAME = os.getenv('FILE_NAME_RONNY_BURGERS')
+        FILE_NAME = os.getenv('FILE_NAME_RONNY_SHAWARMA')
 
         html_data = utils.get_html_page(URL)
-        ronny_burgers_data = get_data(html_data, URL)
+        ronny_shawarma_data = get_data(html_data, URL)
         
         with open("./html/" + FILE_NAME + ".html", "w") as file:
             file.write(str(html_data))
-        print(f"[!!][{FILE_NAME}] was updated\tlength - {len(ronny_burgers_data)}")
-        utils.save_json(ronny_burgers_data, FILE_NAME)
+        print(f"[!!][{FILE_NAME}] was updated\tlength - {len(ronny_shawarma_data)}")
+        utils.save_json(ronny_shawarma_data, FILE_NAME)
         print(f"[{FILE_NAME}] json file created")
         
     except Exception as error:

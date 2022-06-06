@@ -1,4 +1,6 @@
 #!/bin/bash
+echo Deleting old files ...
+python3 preparation.py
 echo Start running scripts ...
 echo Executing puppeteer scripts ...
 node ./puppeteer-scripts/sushi_doma.js
@@ -17,6 +19,8 @@ python3 eshe_kusochek.py
 python3 dodo_pizza.py
 python3 dakicho.py
 python3 ronny_burgers.py
+python3 ronny_combo.py
+python3 ronny_shawarma.py
 python3 tri_bogatirya.py
 python3 kinza.py
 python3 perepechka.py
