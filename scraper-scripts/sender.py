@@ -84,15 +84,43 @@ def main():
                 phone_number = clean[0]['phone_number']
                 category = clean[0]['category']
                 all_websites.append({"title": title, "link": link, "phone_number": phone_number, "category": category})
-
-        delete_old_tables()
-        upload_data(all_jsons)
+        
+        with open("./old_data/all_jsons.txt", "r") as file:
+            old_data_raw = file.read()
+            old_data_clean = json.loads(old_data_raw)
+        
+        if input("Do you want to delete old tables (yes, no)? - ") == "yes":
+            delete_old_tables()
+        
+        print(f"New data length - {len(all_jsons)}.")
+        print(f"Old data length - {len(old_data_clean)}.")
+        if len(all_jsons) != len(old_data_clean):
+            print("Data has changed.")
+        else:
+            if input("Length of data is the same, do you want to check it (yes, no)? - ") == "yes":
+                count = 0
+                for index in range(len(all_jsons)):
+                    if all_jsons[index] != old_data_clean[index]:
+                        print(f"{index}-------------------")
+                        print(all_jsons[index])
+                        print("\n")
+                        print(old_data_clean[index])
+                        print("-------------------")
+                        count += 1
+                if count != 0:
+                    print(f"Data had {count} total differences.")
+                else:
+                    print(f"No differences.")
+        
+        if input("Do you want to upload new data (yes, no)? - ") == "yes":
+            upload_data(all_jsons)
+        
         delete_old_websites()
         upload_new_websites(all_websites)
 
     except Exception as error:
-        print(f"[!!] AN ERROR OCCURRED DURING SENDING - {error}")
-        pass
+        print(f"[!!] AN ERROR OCCURRED DURING SENDING")
+        raise error
 
 
 if __name__ == "__main__":
