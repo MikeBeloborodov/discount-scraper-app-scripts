@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup as bs
 from typing import List
-import utils
+import scraper_scripts.utils as utils
 import os
 from dotenv import load_dotenv
 import re
@@ -59,6 +59,12 @@ def get_data(html_data: bytes) -> List[dict]:
             # website title
             data.update({"website_title": "Izh sensei"})
 
+            # ingredients
+            ingredients_raw = element.find(name='div', attrs='catalog__descr').text
+            ingredients_clean = re.findall(':\s?[^\d]\s?[А-я].+', ingredients_raw)
+            if ingredients_clean:
+                data.update({"ingredients": ingredients_clean[0][2:]})
+
             # category
             data.update({"category": "sushi"})
 
@@ -74,6 +80,8 @@ def main():
     try:
         html_data = utils.get_html_page(URL)
         izh_sensei_data = get_data(html_data)
+
+        # utils.print_data(izh_sensei_data)
 
         with open("./html/" + FILE_NAME + ".html", "w") as file:
             file.write(str(html_data))

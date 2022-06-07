@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup as bs
 from typing import List
-import utils
+import scraper_scripts.utils as utils
 import os
 from dotenv import load_dotenv
 import re

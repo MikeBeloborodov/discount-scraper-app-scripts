@@ -1,8 +1,9 @@
 from bs4 import BeautifulSoup as bs
 from typing import List
-import utils
+import scraper_scripts.utils as utils
 import os
 from dotenv import load_dotenv
+import re
 
 
 def get_data(html_data: bytes) -> List[dict]:
@@ -19,8 +20,11 @@ def get_data(html_data: bytes) -> List[dict]:
         data = {}
         try:
             # title
-            title = element.find(name='a', attrs='modalbox').text.strip()
-            data.update({"title": title})
+            title_raw = element.find(name='a', attrs='modalbox').text.strip()
+            bad_title = re.findall('К?к?артошка', title_raw)
+            if bad_title:
+                continue
+            data.update({"title": title_raw})
 
             # prices
             price = element.find_all(name='p')[1].text.strip()[6:-5]
@@ -44,6 +48,8 @@ def get_data(html_data: bytes) -> List[dict]:
 
             # ingredients
             ingredients = element.find_all(name='p')[0].text.strip()
+            if ingredients == 'ПорцияСоус':
+                continue
             data.update({"ingredients": ingredients})
             
             # category
@@ -54,7 +60,7 @@ def get_data(html_data: bytes) -> List[dict]:
         except Exception as error:
             print(f"Error in {FILE_NAME} - {error}")
 
-    return kebab_data[:-3]
+    return kebab_data
 
 
 def main():
@@ -62,6 +68,8 @@ def main():
         html_data = utils.get_html_page(URL)
         tri_bogatirya_data = get_data(html_data)
         
+        # utils.print_data(tri_bogatirya_data)
+
         with open("./html/" + FILE_NAME + ".html", "w") as file:
             file.write(str(html_data))
         print(f"[!!][{FILE_NAME}] was updated\tlength - {len(tri_bogatirya_data)}")

@@ -24,3 +24,8 @@ def save_json(data: List[dict], file_name: str) -> None:
     with open(f'./json/{file_name}.txt', "w") as file:
         file.write(json.dumps(data))
     
+
+def print_data(data_list: List[dict]) -> None:
+    for data in data_list:
+        print(data)
+    print(len(data_list))

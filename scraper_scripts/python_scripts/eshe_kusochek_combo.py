@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup as bs
 from typing import List
-import utils
+import scraper_scripts.utils as utils
 import os
 from dotenv import load_dotenv
 import re
@@ -12,10 +12,10 @@ def get_data(html_data: bytes) -> List[dict]:
         raise Exception
         
     soup = bs(html_data, "html.parser")
-    elements = soup.find_all(name='div', attrs='prod_item item_t_1')
+    elements = soup.find_all(name='div', attrs='prod_item item_t_3')
     phone_number = soup.find(name='div', attrs='tel').text
 
-    sushi_set_data = []
+    combo_data = []
     for element in elements:
         data = {}
         try:
@@ -25,10 +25,14 @@ def get_data(html_data: bytes) -> List[dict]:
             
             # weight
             weight = element.find(name='div', attrs="pitem_weight").text
+
+            if int(weight[:-3]) < 800:
+                continue
+
             data.update({"weight": weight})
            
             # prices
-            price = element.find(name='div', attrs='pitem_price').text[:-2]
+            price = element.find(name='div', attrs='pitem_price').text[:-2].replace(' ', '')
             data.update({"new_price": price})
             
             # img
@@ -49,24 +53,26 @@ def get_data(html_data: bytes) -> List[dict]:
             data.update({"website_title": "Ещё кусочек"})
             
             # category
-            data.update({"category": "pizza"})
+            data.update({"category": "combo"})
 
             # ingredients
-            ingredients = element.find(name='div', attrs='pitem_descr').text
+            ingredients = element.find(name='div', attrs='pitem_descr').text.strip()
             data.update({"ingredients": ingredients})
 
-            sushi_set_data.append(data)
+            combo_data.append(data)
 
         except Exception as error:
             print(f"Error in {FILE_NAME} - {error}")
 
-    return sushi_set_data[:-1]
+    return combo_data
 
 
 def main():
     try:
         html_data = utils.get_html_page(URL)
         eshe_kusochek_data = get_data(html_data)
+
+        # utils.print_data(eshe_kusochek_data)
 
         with open("./html/" + FILE_NAME + ".html", "w") as file:
             file.write(str(html_data))
@@ -81,5 +87,6 @@ def main():
 if __name__ == "__main__":
     load_dotenv()
     URL = os.getenv('URL_ESHE_KUSOCHEK')
-    FILE_NAME = os.getenv('FILE_NAME_ESHE_KUSOCHEK')
+    HTML_FILE_NAME = os.getenv('FILE_NAME_ESHE_KUSOCHEK')
+    FILE_NAME = os.getenv('FILE_NAME_ESHE_KUSOCHEK_COMBO')
     main()

@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup as bs
 from typing import List
-import utils
+import scraper_scripts.utils as utils
 import os
 from dotenv import load_dotenv
 import re
@@ -13,27 +13,25 @@ def get_data(html_data: bytes) -> List[dict]:
 
     soup = bs(html_data, "html.parser")
     elements = soup.find_all(name='div', attrs='product-wrapper')
-    phone_number = ""
-    for phone_num_element in (soup.find(name='ul',
-                              attrs='inline-list inline-list-with-border main-nav-style').find_all(name='a')):
-        try:
-            phone_number = phone_num_element.get("href")[4:]
-        except Exception as error:
-            print(f"Error in {FILE_NAME} - {error}")
-
+    phone_number = "+3412771176"
+    
     sushi_set_data = []
     for element in elements:
         data = {}
         try:
             # title
-            data.update({"title": element.h3.a.string})
+            title_raw = element.h3
+            if not title_raw:
+                continue
+            title_clean = element.h3.a.string
+            data.update({"title": title_clean})
 
             # weight
             product_info = element.find(name='div', attrs="product-information")
             weight_raw = product_info.find(name='div', attrs='hover-content-inner').text
             weight_clean = re.findall('Вес:[\s0-9]*', weight_raw)[0][5:]
             data.update({"weight": weight_clean + 'гр'})
-
+           
             # prices
             prices = element.find_all(name='span', attrs='woocommerce-Price-amount amount')
             if len(prices) == 2:
@@ -41,7 +39,7 @@ def get_data(html_data: bytes) -> List[dict]:
                 data.update({"new_price": f"{str(prices[1].text)[:-5]}".replace(' ', '')})
             else:
                 data.update({"new_price": f"{str(prices[0].text)[:-5]}".replace(' ', '')})
-
+            
             # img
             data.update({"img": element.img.get('src')})
 
@@ -57,9 +55,19 @@ def get_data(html_data: bytes) -> List[dict]:
             # website title
             data.update({"website_title": "Суши бро"})
 
+            # weight
+            weight_raw = element.find(name='div', attrs='hover-content-inner').text.strip()
+            weight_clean = re.findall('.*\гр', weight_raw)
+            data.update({'weight': weight_clean[0][5:-1]})
+
+            # ingredients
+            ingredients_raw = element.find(name='div', attrs='hover-content-inner').text.strip()
+            ingredients_clean = re.findall('Состав:.*', ingredients_raw)
+            if ingredients_clean:
+                data.update({'ingredients': ingredients_clean[0][7:]})
+
             # category
             data.update({"category": "sushi"})
-
             sushi_set_data.append(data)
 
         except Exception as error:
@@ -72,6 +80,8 @@ def main():
     try:
         html_data = utils.get_html_page(URL)
         sushi_bro_data = get_data(html_data)
+
+        # utils.print_data(sushi_bro_data)
 
         with open("./html/" + FILE_NAME + ".html", "w") as file:
             file.write(str(html_data))

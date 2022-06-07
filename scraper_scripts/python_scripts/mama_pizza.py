@@ -3,7 +3,7 @@ from typing import List
 import os
 from dotenv import load_dotenv
 import re
-import utils
+import scraper_scripts.utils as utils
 
 
 def get_data(html_data: str) -> List[dict]:

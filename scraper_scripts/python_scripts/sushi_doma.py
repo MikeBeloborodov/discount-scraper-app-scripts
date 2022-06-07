@@ -3,7 +3,7 @@ from typing import List
 import os
 from dotenv import load_dotenv
 import re
-import utils
+import scraper_scripts.utils as utils
 
 
 def get_data(html_data: str) -> List[dict]:
@@ -49,6 +49,10 @@ def get_data(html_data: str) -> List[dict]:
             # website title
             data.update({"website_title": "Суши дома"})
 
+            # ingredients
+            ingredients = element.find(name='div', attrs='card-description').text.strip().replace('\n', ' ')
+            data.update({"ingredients": ingredients})
+
             # category
             data.update({"category": "sushi"})
 
@@ -69,6 +73,9 @@ def main():
             return
 
         sushi_doma_data = get_data(html_data)
+        
+        # utils.print_data(sushi_doma_data)
+        
         if not sushi_doma_data:
             print(f"[!!][{FILE_NAME}] is broken")
         else:

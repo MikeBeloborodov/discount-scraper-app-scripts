@@ -2,31 +2,35 @@ from bs4 import BeautifulSoup as bs
 from typing import List
 import os
 from dotenv import load_dotenv
-import utils
+import re
+import scraper_scripts.utils as utils
 
 
 def get_data(html_data: str) -> List[dict]:
     if not html_data:
         print(f"Error while getting data - {FILE_NAME}")
         raise Exception
-        
+
     soup = bs(html_data, "html.parser")
-    shawarma_element_boxes = soup.find_all(name='div', attrs='t-store js-store')
+    shawarma_element_boxes = soup.find_all(name='div', attrs='js-product')
     phone_number = soup.find(name='div', attrs='t-text').a.text
-    elements = []
-    for box_element in shawarma_element_boxes[1:3]:
-        buffer = box_element.find_all(name='div', attrs='js-product')
-        elements.extend(buffer[:-1])
 
-    pizza_data = []
+    shawarma_data = []
 
-    for element in elements:
+    for element in shawarma_element_boxes:
         data = {}
         try:
-            
+
             # title
-            title = element.find(name='div', attrs='js-store-prod-name').text
-            data.update({"title": title})
+            title_raw = element.find(name='div', attrs='js-store-prod-name').text
+            if not title_raw:
+                continue
+            
+            title_clean = re.findall('(Ш?ш?ав?е?у?рма)', title_raw)
+            if not title_clean:
+                continue
+            
+            data.update({"title": title_raw})
             
             # price
             price = element.find(name='div', attrs='js-product-price').text
@@ -55,12 +59,12 @@ def get_data(html_data: str) -> List[dict]:
             ingredients = element.find(name='div', attrs='js-store-prod-descr').text.strip()
             data.update({"ingredients": ingredients})
 
-            pizza_data.append(data)
+            shawarma_data.append(data)
 
         except Exception as error:
             print(f"Error in {FILE_NAME} - {error}")
 
-    return pizza_data
+    return shawarma_data
 
 
 def main():
@@ -73,6 +77,9 @@ def main():
             return
 
         dakicho_data = get_data(html_data)
+        
+        # utils.print_data(dakicho_data)
+
         if not dakicho_data:
             print(f"[!!][{FILE_NAME}] is broken")
         else:
@@ -80,6 +87,7 @@ def main():
             utils.save_json(dakicho_data, FILE_NAME)
             print(f"[{FILE_NAME}] json file created")
 
+        
     except Exception as error:
         print(f"[{FILE_NAME}] An error occurred: {error}")
 

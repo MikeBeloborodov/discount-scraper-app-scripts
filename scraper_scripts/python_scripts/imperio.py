@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup as bs
 from typing import List
-import utils
+import scraper_scripts.utils as utils
 import os
 from dotenv import load_dotenv
 
@@ -16,11 +16,15 @@ def get_data(html_data: bytes) -> List[dict]:
 
     sushi_set_data = []
 
-    for element in elements[:22]:
+    for element in elements:
         data = {}
         try:
             # title
-            data.update({"title": element.h3.a.get('title')})
+            title_raw = element.h3
+            if not title_raw:
+                continue
+            title = element.h3.a.get('title')
+            data.update({"title": title})
             
             # weight
             weight_and_price = element.find_all(name='b')
@@ -59,6 +63,8 @@ def main():
     try:
         html_data = utils.get_html_page(URL)
         sushi_imperio_data = get_data(html_data)
+
+        # utils.print_data(sushi_imperio_data)
 
         with open("./html/" + FILE_NAME + ".html", "w") as file:
             file.write(str(sushi_imperio_data))
