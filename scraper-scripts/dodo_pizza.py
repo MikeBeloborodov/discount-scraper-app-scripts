@@ -6,9 +6,15 @@ import re
 import utils
 
 
-def get_data(html_data: str, url: str) -> List[str]:
+load_dotenv()
+FILE_NAME = os.getenv('FILE_NAME_DODO_PIZZA')
+URL = os.getenv('URL_DODO_PIZZA')
+
+
+def get_data(html_data: str) -> List[dict]:
     if not html_data:
-        return None
+        print(f"Error while getting data - {FILE_NAME}")
+        raise Exception
         
     soup = bs(html_data, "html.parser")
     pizza_box = soup.find_all(name='section', id='pizzas')
@@ -44,21 +50,21 @@ def get_data(html_data: str, url: str) -> List[str]:
             data.update({"img": img_clean[0][5:]})
             
             # link
-            data.update({"link": url})
+            data.update({"link": URL})
 
             # phone number
             data.update({"phone_number": "8 800 302-00-60"})
             
             # website link
-            data.update({'website_link': url})
+            data.update({'website_link': URL})
             
             # website title
             data.update({"website_title": "Додо пицца"})
             
-            # cathegory
-            data.update({"cathegory": "pizza"})
+            # category
+            data.update({"category": "pizza"})
            
-            #ingredients
+            # ingredients
             if element.find(name='div', attrs='card-desc'):
                 ingredients = element.find(name='div', attrs='card-desc').text
                 data.update({"ingredients": ingredients})
@@ -69,20 +75,14 @@ def get_data(html_data: str, url: str) -> List[str]:
 
             pizza_data.append(data)
 
-        except:
-            pass
+        except Exception as error:
+            print(f"Error in {FILE_NAME} - {error}")
 
     return pizza_data
 
 
 def main():
     try:
-        load_dotenv()
-
-        FILE_NAME = os.getenv('FILE_NAME_DODO_PIZZA')
-        URL = os.getenv('URL_DODO_PIZZA')
-        html_data = ""
-
         if os.path.exists("./html/" + FILE_NAME + ".html"):
             with open("./html/" + FILE_NAME + ".html", "r") as file:
                 html_data = file.read()
@@ -90,7 +90,7 @@ def main():
             print(f"[!!][{FILE_NAME}] html file does not exist.")
             return
 
-        dodo_pizza_data = get_data(html_data, URL)
+        dodo_pizza_data = get_data(html_data)
 
         if not dodo_pizza_data:
             print(f"[!!][{FILE_NAME}] is broken")
@@ -100,7 +100,8 @@ def main():
             print(f"[{FILE_NAME}] json file created")
 
     except Exception as error:
-        print(f"[!!!] An error occured: {error}")
+        print(f"[!!!] An error occurred: {error}")
+
 
 if __name__ == "__main__":
     main()

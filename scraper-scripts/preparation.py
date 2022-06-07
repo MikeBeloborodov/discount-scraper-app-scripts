@@ -1,5 +1,6 @@
 import os
 
+
 def main():
     json_files = os.listdir("./json")
     html_files = os.listdir("./html")
@@ -11,6 +12,7 @@ def main():
         os.remove(f"./html/{file}")
 
     print("Old files deleted.")
+
 
 if __name__ == "__main__":
     main()

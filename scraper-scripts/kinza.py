@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import re
 
 
-def get_data(json_data: str, url: str, url_normal: str) -> List[str]:
+def get_data(json_data) -> List[dict]:
     dumplings_data = []
 
     try:
@@ -27,19 +27,19 @@ def get_data(json_data: str, url: str, url_normal: str) -> List[str]:
             data.update({"img": img})
 
             # link
-            data.update({"link": url_normal})
+            data.update({"link": URL_NORMAL})
 
             # phone number
             data.update({"phone_number": '+7 3412 77-22-52'})
 
             # website link
-            data.update({'website_link': url_normal})
+            data.update({'website_link': URL_NORMAL})
            
             # website title
             data.update({"website_title": "Кинза"})
 
-            # cathegory
-            data.update({"cathegory": "dumplings"})
+            # category
+            data.update({"category": "dumplings"})
 
             # ingredients
             ingredients = element['descr'].strip().replace('<br />' , ' ').replace('&nbsp;', ' ')
@@ -51,30 +51,28 @@ def get_data(json_data: str, url: str, url_normal: str) -> List[str]:
             data.update({"weight": weight_clean})
             
             dumplings_data.append(data)
-            
+
     except Exception as error:
-        print(f"An error occured during parsing: {error}")
+        print(f"Error in {FILE_NAME} - {error}")
 
     return dumplings_data
 
+
 def main():
     try:
-        load_dotenv()
-
-        URL = os.getenv('URL_KINZA')
-        URL_NORMAL = os.getenv('URL_KINZA_NORMAL')        
-        FILE_NAME = os.getenv('FILE_NAME_KINZA')
-
         json_data = utils.get_json_data(URL)
-
-        dumplings_data = get_data(json_data, URL, URL_NORMAL)
+        dumplings_data = get_data(json_data)
         
         utils.save_json(dumplings_data, FILE_NAME)
         print(f"[{FILE_NAME}] json file created")
         
     except Exception as error:
-        print(f"[!!!] An error occured: {error}")
+        print(f"[!!!] An error occurred: {error}")
 
 
 if __name__ == "__main__":
+    load_dotenv()
+    URL = os.getenv('URL_KINZA')
+    URL_NORMAL = os.getenv('URL_KINZA_NORMAL')
+    FILE_NAME = os.getenv('FILE_NAME_KINZA')
     main()

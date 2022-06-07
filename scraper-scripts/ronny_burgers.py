@@ -3,12 +3,12 @@ from typing import List
 import utils
 import os
 from dotenv import load_dotenv
-import re
 
 
-def get_data(html_data: str, url: str) -> List[str]:
+def get_data(html_data: bytes) -> List[dict]:
     if not html_data:
-        return None
+        print(f"Error while getting data - {FILE_NAME}")
+        raise Exception
         
     soup = bs(html_data, "html.parser")
     burger_box = soup.find(name='div', attrs='mobile-catalog')
@@ -29,16 +29,16 @@ def get_data(html_data: str, url: str) -> List[str]:
             
             # img
             img = element.find(name='img').get('src').replace(' ', '%20')
-            data.update({"img": url[:-7] + img})
+            data.update({"img": URL[:-7] + img})
             
             # link
-            data.update({"link": url})
+            data.update({"link": URL})
             
             # phone number
             data.update({"phone_number": phone_number})
            
             # website link
-            data.update({"website_link": url})
+            data.update({"website_link": URL})
             
             # website title
             data.update({"website_title": "Ронни"})
@@ -51,25 +51,21 @@ def get_data(html_data: str, url: str) -> List[str]:
             ingredients = element.find(name='div', attrs='meal-content-text').text.strip().replace('\xa0', ' ')
             data.update({"ingredients": ingredients})
 
-            # cathegory
-            data.update({"cathegory": "burger"})
+            # category
+            data.update({"category": "burger"})
             
             burger_data.append(data)
 
         except Exception as error:
-            print(error)
+            print(f"Error in {FILE_NAME} - {error}")
 
     return burger_data[:13]
 
+
 def main():
     try:
-        load_dotenv()
-
-        URL = os.getenv('URL_RONNY_BURGERS')
-        FILE_NAME = os.getenv('FILE_NAME_RONNY_BURGERS')
-
         html_data = utils.get_html_page(URL)
-        ronny_burgers_data = get_data(html_data, URL)
+        ronny_burgers_data = get_data(html_data)
         
         with open("./html/" + FILE_NAME + ".html", "w") as file:
             file.write(str(html_data))
@@ -78,8 +74,11 @@ def main():
         print(f"[{FILE_NAME}] json file created")
         
     except Exception as error:
-        print(f"[!!!] An error occured: {error}")
+        print(f"[!!!] An error occurred: {error}")
 
 
 if __name__ == "__main__":
+    load_dotenv()
+    URL = os.getenv('URL_RONNY_BURGERS')
+    FILE_NAME = os.getenv('FILE_NAME_RONNY_BURGERS')
     main()

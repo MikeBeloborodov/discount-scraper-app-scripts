@@ -5,9 +5,10 @@ import os
 from dotenv import load_dotenv
 
 
-def get_data(html_data: str, url: str) -> List[str]:
+def get_data(html_data: bytes) -> List[dict]:
     if not html_data:
-        return None
+        print(f"Error while getting data - {FILE_NAME}")
+        raise Exception
         
     soup = bs(html_data, "html.parser")
     elements = soup.find_all(name='div', attrs='page-list-ext-item')
@@ -15,7 +16,7 @@ def get_data(html_data: str, url: str) -> List[str]:
 
     sushi_set_data = []
 
-    for element in elements:
+    for element in elements[:22]:
         data = {}
         try:
             # title
@@ -38,29 +39,26 @@ def get_data(html_data: str, url: str) -> List[str]:
             data.update({"phone_number": phone_number})
 
             # website link
-            data.update({"website_link": url})
+            data.update({"website_link": URL})
 
             # website title
             data.update({"website_title": "Imperio18"})
 
-            # cathegory
-            data.update({"cathegory": "sushi"})
+            # category
+            data.update({"category": "sushi"})
 
             sushi_set_data.append(data)
-        except:
-            pass
+
+        except Exception as error:
+            print(f"Error in {FILE_NAME} - {error}")
+
     return sushi_set_data
 
 
 def main():
     try:
-        load_dotenv()
-
-        URL = os.getenv('URL_IMPERIO')
-        FILE_NAME = os.getenv('FILE_NAME_IMPERIO')
-
         html_data = utils.get_html_page(URL)
-        sushi_imperio_data = get_data(html_data, URL)
+        sushi_imperio_data = get_data(html_data)
 
         with open("./html/" + FILE_NAME + ".html", "w") as file:
             file.write(str(sushi_imperio_data))
@@ -70,7 +68,11 @@ def main():
         print(f"[{FILE_NAME}] json file created")
         
     except Exception as error:
-        print(f"[!!!] An error occured: {error}")
+        print(f"[!!!] An error occurred: {error}")
+
 
 if __name__ == "__main__":
+    load_dotenv()
+    URL = os.getenv('URL_IMPERIO')
+    FILE_NAME = os.getenv('FILE_NAME_IMPERIO')
     main()

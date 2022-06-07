@@ -4,19 +4,18 @@ from user_agent2 import generate_user_agent
 import json
 
 
-def get_html_page(url: str) -> str:
+def get_html_page(url: str) -> bytes:
     ua = generate_user_agent(navigator="chrome")
     headers = {'User-Agent': ua}    
-    res  = requests.get(url, headers=headers)
+    res = requests.get(url, headers=headers)
 
     return res.content
 
 
-def get_json_data(url: str) -> str:
+def get_json_data(url: str):
     ua = generate_user_agent(navigator="chrome")
     headers = {'User-Agent': ua}    
-    res  = requests.get(url, headers=headers)
-
+    res = requests.get(url, headers=headers)
 
     return res.json()
 
