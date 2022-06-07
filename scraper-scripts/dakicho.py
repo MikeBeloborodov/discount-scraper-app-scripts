@@ -5,11 +5,6 @@ from dotenv import load_dotenv
 import utils
 
 
-load_dotenv()
-FILE_NAME = os.getenv('FILE_NAME_DAKICHO')
-URL = os.getenv('URL_DAKICHO')
-
-
 def get_data(html_data: str) -> List[dict]:
     if not html_data:
         print(f"Error while getting data - {FILE_NAME}")
@@ -90,5 +85,8 @@ def main():
 
 
 if __name__ == "__main__":
+    load_dotenv()
+    FILE_NAME = os.getenv('FILE_NAME_DAKICHO')
+    URL = os.getenv('URL_DAKICHO')
     main()
     

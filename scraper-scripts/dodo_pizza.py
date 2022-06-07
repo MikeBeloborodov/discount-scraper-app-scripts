@@ -6,11 +6,6 @@ import re
 import utils
 
 
-load_dotenv()
-FILE_NAME = os.getenv('FILE_NAME_DODO_PIZZA')
-URL = os.getenv('URL_DODO_PIZZA')
-
-
 def get_data(html_data: str) -> List[dict]:
     if not html_data:
         print(f"Error while getting data - {FILE_NAME}")
@@ -104,5 +99,8 @@ def main():
 
 
 if __name__ == "__main__":
+    load_dotenv()
+    FILE_NAME = os.getenv('FILE_NAME_DODO_PIZZA')
+    URL = os.getenv('URL_DODO_PIZZA')
     main()
     
