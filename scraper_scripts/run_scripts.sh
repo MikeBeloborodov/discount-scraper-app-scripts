@@ -27,6 +27,7 @@ python3 ./python_scripts/tri_bogatirya.py
 python3 ./python_scripts/kinza.py
 python3 ./python_scripts/perepechka.py
 python3 ./python_scripts/papa_lavash.py
+python3 ./python_scripts/odin_kg_schastya.py
 python3 sender.py
 echo Exiting virtualenv ...
 deactivate
