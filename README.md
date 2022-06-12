@@ -1,1 +1,1 @@
-Scripts to get promo and discounts info from various websites
+Scripts to get promo and discounts info from various websites.
