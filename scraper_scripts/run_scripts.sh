@@ -30,6 +30,7 @@ python3 ./python_scripts/papa_lavash.py
 python3 ./python_scripts/odin_kg_schastya.py
 python3 ./python_scripts/parus18.py
 python3 ./python_scripts/kfc_burgers.py
+python3 ./python_scripts/rocket_roll.py
 python3 sender.py
 echo Exiting virtualenv ...
 deactivate
