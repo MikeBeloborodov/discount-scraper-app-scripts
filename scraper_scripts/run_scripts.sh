@@ -7,6 +7,7 @@ node ./puppeteer_scripts/sushi_doma.js
 node ./puppeteer_scripts/mama_pizza.js
 node ./puppeteer_scripts/dodo_pizza.js
 node ./puppeteer_scripts/dakicho.js
+node ./puppeteer_scripts/meatproject.js
 echo Entering virtualenv ...
 source ../env/bin/activate
 python3 ./python_scripts/imperio.py
@@ -32,6 +33,7 @@ python3 ./python_scripts/parus18.py
 python3 ./python_scripts/kfc_burgers.py
 python3 ./python_scripts/rocket_roll.py
 python3 ./python_scripts/fresh_kebab.py
+python3 ./python_scripts/meatproject.py
 python3 sender.py
 echo Exiting virtualenv ...
 deactivate
