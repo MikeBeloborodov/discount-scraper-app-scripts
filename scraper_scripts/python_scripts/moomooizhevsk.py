@@ -76,7 +76,7 @@ def main():
         html_data = utils.get_html_page(URL)
         moomooizhevsk_data = get_data(html_data)
 
-        utils.print_data(moomooizhevsk_data)
+        # utils.print_data(moomooizhevsk_data)
 
         with open("./html/" + FILE_NAME + ".html", "w") as file:
             file.write(str(moomooizhevsk_data))

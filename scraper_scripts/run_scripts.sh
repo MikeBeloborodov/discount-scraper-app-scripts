@@ -35,6 +35,7 @@ python3 ./python_scripts/rocket_roll.py
 python3 ./python_scripts/fresh_kebab.py
 python3 ./python_scripts/meatproject.py
 python3 ./python_scripts/moomooizhevsk.py
+python3 ./python_scripts/pandagrill.py
 python3 sender.py
 echo Exiting virtualenv ...
 deactivate
